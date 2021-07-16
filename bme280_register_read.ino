@@ -46,9 +46,9 @@ void setup() {
   }
  
  
-unsigned int temp1,temp2,temp3;
-unsigned int pres1,pres2,pres3;
-unsigned int hum1, hum2;
+byte temp1,temp2,temp3;
+byte pres1,pres2,pres3;
+byte hum1, hum2;
 
  
 void loop() {  
@@ -78,35 +78,34 @@ void loop() {
   pressure = (pressure<<8) | pres2;
   pressure = (pressure<<4) | pres3;
   float pressure_float = float(pressure)/256;
-  Serial.print("Pres.: "); Serial.print(pressure_float,5);Serial.print(" hPa, ");
+  Serial.print("Pres.: "); Serial.print(pressure_float,5);Serial.print(" hPa/mBar, ");
 
-  // r e a d    h u m i d i t y
-  hum1 = read_register(BME280adress,humidity_msb);
-  hum2 = read_register(BME280adress,humidity_lsb);
-  unsigned int humidity = hum1 * 256 + hum2;
-  Serial.print("Humidity: ");
-  Serial.print(humidity);
-  Serial.println( " % RH \n");
+//  // r e a d    h u m i d i t y
+//  hum1 = read_register(BME280adress,humidity_msb);
+//  hum2 = read_register(BME280adress,humidity_lsb);
+//  unsigned int humidity = hum1 * 256 + hum2;
+//  Serial.print("Humidity: ");
+//  Serial.print(humidity);
+//  Serial.println( " % RH \n");
 
-  delay(100);
-
+  Serial.println( "\n");
+  delay(250);
   Serial.write(12);
-  Serial.println( "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+  
 }
 
-
-int read_register(int ic_address,int reg_address){
+byte read_register(int ic_address,int reg_address){
   Wire.beginTransmission(ic_address);
   Wire.write(reg_address);
   Wire.endTransmission();
-  int returned_value;
+  byte returned_value;
   Wire.requestFrom(ic_address,byte(1));
-  if( Wire.available() == 1)  // check if there are 2 available bytes
+  if( Wire.available() == 1){  // check if there are 2 available bytes
     returned_value = Wire.read();
+    return returned_value;
+  }
   else
     return -1;
-
-  return returned_value;
   }
 
   
