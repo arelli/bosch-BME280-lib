@@ -38,12 +38,12 @@ void setup() {
   Serial.begin(115200);
   Wire.begin();  //initiate the wire library(needed!)
   set_register(BME280adress,reset_register,B10110110);   //   B10110110 is the required sequence to reset the device
-  set_register(BME280adress,config_register,B01001000);
+  set_register(BME280adress,config_register,B01001000);  // configure the oversampling and IIR filter
+
+  set_register(BME280adress,ctrl_humidity ,0x01);
+  
   set_register(BME280adress,ctrl_meas, B01101101);  // do one forced measurement cycle
-  int hum_ctrl = read_register(BME280adress,ctrl_humidity);
-  hum_ctrl = hum_ctrl | 100;  // change only the last 3 digits
-  set_register(BME280adress,ctrl_humidity ,hum_ctrl);  // the humidity sensor needs to be activated(carefull:update after ctrl_meas!!)
-}
+  }
  
  
 int temp1,temp2,temp3;
