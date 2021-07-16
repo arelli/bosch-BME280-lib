@@ -46,9 +46,9 @@ void setup() {
   }
  
  
-int temp1,temp2,temp3;
-int pres1,pres2,pres3;
-int hum1, hum2;
+unsigned int temp1,temp2,temp3;
+unsigned int pres1,pres2,pres3;
+unsigned int hum1, hum2;
 
  
 void loop() {  
@@ -64,7 +64,7 @@ void loop() {
   temp2 = read_register(BME280adress,temperature_lsb);
   temp3 = read_register(BME280adress,temperature_xlsb);
   temp3 = temp3 & 11110000;  // only the 4 first bits are used
-  long int temperature = temp1;  // long to fit the 16+4 bit number we shove into temperature
+  unsigned long int temperature = temp1;  // long to fit the 16+4 bit number we shove into temperature
   temperature = (temperature << 8) | temp2;  // shift bits to make place for the next 8 bits to be included with logical OR ("|")
   float temperature_float = (float(temperature)+ (float(temp3)/16))/1000;
   Serial.print("Temperature: "); Serial.print(temperature_float,5); Serial.print(" °C, ");
@@ -74,10 +74,11 @@ void loop() {
   pres2 = read_register(BME280adress,pressure_lsb);
   pres3 = read_register(BME280adress,pressure_xlsb);
   pres3 = pres3 & 11110000;  // keep only the first 4 digits of the register(see datasheet)
-  long int pressure = pres1;  // 32 bit capacity
+  unsigned long int pressure = pres1;  // 32 bit capacity
   pressure = (pressure<<8) | pres2;
+  pressure = (pressure<<4) | pres3;
   float pressure_float = float(pressure)/256;
-  Serial.print("Pres.: "); Serial.print(pressure_float,5);Serial.print(" Pa, ");
+  Serial.print("Pres.: "); Serial.print(pressure_float,5);Serial.print(" hPa, ");
 
   // r e a d    h u m i d i t y
   hum1 = read_register(BME280adress,humidity_msb);
