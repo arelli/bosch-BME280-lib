@@ -80,8 +80,8 @@ void setup(){
     Serial.begin(115200);
     Wire.begin();
     write_register(reset_register, reset_seq);
-    write_register(ctrl_meas, B00100101);
-    write_register(ctrl_humidity, 0x01);
+    write_register(ctrl_meas, 00100101);
+    write_register(ctrl_humidity, 00000001);
 }
 
 
@@ -89,11 +89,10 @@ void loop(){
     write_register(ctrl_meas, B00100101);
     delay(500);
     dump_registers();
-    int humidity_lsb = read_register(hum_lsb);
-    int humidity_msb = read_register(hum_msb);
+    long int humidity_lsb = read_register(hum_lsb);
+    long int humidity_msb = read_register(hum_msb);
     long int humidity = humidity_msb;
     humidity = (humidity<<8) | humidity_lsb;
-    float humidity_float = float(humidity)/1024;
     Serial.print("Humidity = ");
     Serial.print(humidity);
     Serial.print(" % RH \n");
