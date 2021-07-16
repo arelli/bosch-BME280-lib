@@ -5,10 +5,9 @@
 Adafruit_BMP280 bmp; // I2C
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println(F("BMP280 test"));
+  Serial.begin(115200);
 
-  if (!bmp.begin(0x76)) {
+  if (!bmp.begin(0x76)) {  // this 0x76 is the I2C address of the sensor, and is needed!
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring or "
                       "try a different address!"));
     while (1) delay(10);
@@ -25,21 +24,16 @@ void setup() {
 void loop() {
     Serial.print(F("Temperature = "));
     Serial.print(bmp.readTemperature());
-    Serial.println(" *C");
+    Serial.println(" °C");
 
     Serial.print(F("Pressure = "));
     Serial.print(bmp.readPressure());
     Serial.println(" Pa");
 
     Serial.print(F("Approx altitude = "));
-    Serial.print(bmp.readAltitude(1013.25)); /* Adjusted to local forecast! */
+    Serial.print(bmp.readAltitude(1013.25)); /* Adjusted to local forecast!(in hPa hectopascal, not Pa!) */
     Serial.println(" m");
 
-
-    Serial.print(F("Approx humidity = "));
-    Serial.print(bmp.readAltitude(1013.25)); /* Adjusted to local forecast! */
-    Serial.println(" m");
-
-    Serial.println();
-    delay(2000);
+    delay(200);
+    Serial.write(12);  // clear some terminals 
 }
